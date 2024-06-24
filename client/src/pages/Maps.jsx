@@ -4,7 +4,7 @@ import { Paper, TextField } from "@mui/material";
 import img from "../assets/person-traveling-enjoying-their-vacation.webp";
 import ResponsiveAppBar from "../components/Navbar";
 
-const apiKey = "AIzaSyCOuOGDld8dMKAsvn06Sfxk6l6GLfru4jo"; // Replace 'YOUR_API_KEY' with your actual API key
+const apiKey = "AIzaSyCOuOGDld8dMKAsvn06Sfxk6l6GLfru4jo";
 
 function Maps() {
   const [map, setMap] = useState(null);
