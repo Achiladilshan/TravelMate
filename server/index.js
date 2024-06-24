@@ -2,6 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const axios = require('axios');
+require('dotenv').config();
+
+// Access the API key
+const apiKey = process.env.API_KEY;
 
 
 const app = express();
@@ -11,7 +15,6 @@ const PORT = process.env.PORT || 3002;
 app.use(bodyParser.json());
 
 // Google Places API endpoint
-const PLACES_API_KEY = 'AIzaSyDo-T1IMhr8Zsnh1IMQfK1fSSEtqIYf7Fc'; // Replace with your API key
 const PLACES_API_URL = 'https://maps.googleapis.com/maps/api/place/textsearch/json';
 
 // Specify CORS options
@@ -95,7 +98,7 @@ async function getDestinationsFromKeywords(keywords,country) {
 
 async function getPlaceDetailsByQuery(query) {
     try {
-        const response = await axios.get(`${PLACES_API_URL}?query=${query}&key=${PLACES_API_KEY}`);
+        const response = await axios.get(`${PLACES_API_URL}?query=${query}&key=${apiKey}`);
         const place = response.data.results[0]; // Assuming we only need details for the first result
         return place;
     } catch (error) {
