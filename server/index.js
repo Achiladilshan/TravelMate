@@ -5,7 +5,8 @@ const axios = require('axios');
 require('dotenv').config();
 
 // Access the API key
-const apiKey = process.env.API_KEY;
+const PLACES_API_KEY = process.env.PLACES_API_KEY;
+const geminiApiKey = process.env.geminiApiKey;
 
 
 const app = express();
@@ -19,7 +20,7 @@ const PLACES_API_URL = 'https://maps.googleapis.com/maps/api/place/textsearch/js
 
 // Specify CORS options
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://192.168.50.22:3000'], // Allow requests only from this origin
+  origin: ['http://localhost:3000'], // Allow requests only from this origin
   methods: ['GET', 'POST'], // Allow only specified HTTP methods
 };
 
@@ -28,7 +29,6 @@ app.use(cors(corsOptions));
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const geminiApiKey = 'AIzaSyAXZEytpJC5F8hpjx-YAZd3qMYJPGUcPr0';
 const googleAI = new GoogleGenerativeAI(geminiApiKey);
 
 async function sendPrompt(prompt) {
@@ -71,7 +71,7 @@ async function geminiAIExtractKeywords(userInput) {
 
 // Function to remove asterisks from keywords
 function removeAsterisks(keywords) {
-    return keywords.map(keyword => keyword.replace(/^[\*\-\s]*/, ''));
+    return keywords.map(keyword => keyword.replace(/^[\*\-\s]+/, ''));
 }
 
 
@@ -98,7 +98,8 @@ async function getDestinationsFromKeywords(keywords,country) {
 
 async function getPlaceDetailsByQuery(query) {
     try {
-        const response = await axios.get(`${PLACES_API_URL}?query=${query}&key=${apiKey}`);
+        console.log(query);
+        const response = await axios.get(`${PLACES_API_URL}?query=${query}&key=${PLACES_API_KEY}`);
         const place = response.data.results[0]; // Assuming we only need details for the first result
         return place;
     } catch (error) {
@@ -148,7 +149,7 @@ app.post('/recommend', async (req, res) => {
 
         const destinationsWithPhotos = [];
 
-        for (const destination of destinations) {
+        for (const destination of cleaneddestinations) {
             try {
                 const place = await getPlaceDetailsByQuery(destination);
                 const placeId = place.place_id;
